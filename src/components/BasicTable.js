@@ -13,7 +13,7 @@ import {Box} from "@material-ui/core";
 export default class BasicTable extends React.Component {
     render() {
 
-        const {customers} = this.props;
+        const {customers, handleChangePageFn, pages} = this.props;
 
         return (
             <TableContainer component={Paper}>
@@ -41,7 +41,7 @@ export default class BasicTable extends React.Component {
 
                 </Table>
                 <Box display="flex" justifyContent="center" my={2}>
-                    <Pagination count={10} color="primary" />
+                    <Pagination count={pages} color="primary" onChange={handleChangePageFn}/>
                 </Box>
             </TableContainer>
         );

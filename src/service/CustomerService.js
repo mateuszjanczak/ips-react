@@ -2,8 +2,13 @@ class CustomerService {
 
     url = "http://localhost:8080/"
 
-    getCustomers() {
-        return fetch(this.url + "customers")
+    getCustomersCount() {
+        return fetch(`${this.url}/customers/count`)
+            .then(res => res.json());
+    }
+
+    getCustomers(limit, offset) {
+        return fetch(`${this.url}/customers/limit/${limit}/offset/${offset}`)
             .then(res => res.json());
     }
 

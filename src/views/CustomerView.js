@@ -8,15 +8,21 @@ class CustomerView extends Component {
 
     state = {
         formEnabled: false,
-        customers: []
+        customers: [],
+        pages: 1
     }
 
     componentDidMount() {
-        this.fetchCustomers();
+        CustomerService.getCustomersCount()
+            .then(({count}) => this.setState({
+                ...this.state,
+                pages: parseInt(count / 10) + 1
+            }))
+        this.fetchCustomers(10, 0);
     }
 
-    fetchCustomers = () => {
-        CustomerService.getCustomers()
+    fetchCustomers = (limit, offset) => {
+        CustomerService.getCustomers(limit, offset)
             .then(customers => this.setState({...this.state, customers}));
     }
 
@@ -33,11 +39,15 @@ class CustomerView extends Component {
         })
     }
 
+    handleChangePage = (event, value) => {
+        this.fetchCustomers(10, value - 1);
+    }
+
     render() {
         return (
             <>
                 <Box mt={2}>
-                    <BasicTable customers={this.state.customers}/>
+                    <BasicTable customers={this.state.customers} handleChangePageFn={this.handleChangePage} pages={this.state.pages}/>
                     <Box display="flex" justifyContent="flex-end" mt={1}>
                         <Button variant="contained" color="primary" onClick={this.handleAdd}>
                             Dodaj nowego klienta
