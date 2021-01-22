@@ -2,12 +2,15 @@ import {Component} from "react";
 import {Box, Button} from "@material-ui/core";
 import BasicTable from "../components/BasicTable";
 import Form from "../components/Form";
+import EditForm from "../components/EditForm";
 import CustomerService from "../service/CustomerService";
 
 class CustomerView extends Component {
 
     state = {
         formEnabled: false,
+        formEditEnabled: false,
+        formEditId: 0,
         customers: [],
         pages: 1
     }
@@ -42,7 +45,10 @@ class CustomerView extends Component {
 
     handleAdd = () => {
         this.setState({
-            formEnabled: !this.state.formEnabled
+            ...this.state,
+            formEnabled: !this.state.formEnabled,
+            formEditEnabled: false,
+            formEditId: 0
         })
     }
 
@@ -53,8 +59,24 @@ class CustomerView extends Component {
         })
     }
 
+    editCustomer = (customer) => {
+        this.setState({
+            ...this.state,
+            customers: [...this.state.customers.filter(oldCustomer => oldCustomer.id_uzytkownika !== customer.id_uzytkownika), customer].sort((a, b) => a.id_uzytkownika < b.id_uzytkownika ? -1 : 1)
+        })
+    }
+
     handleChangePage = (event, value) => {
         this.fetchCustomers(10, value - 1);
+    }
+
+    handleEditCustomer = (id) => {
+        this.setState({
+            ...this.state,
+            formEnabled: false,
+            formEditEnabled: !this.state.formEditEnabled,
+            formEditId: id
+        })
     }
 
     handleRemoveCustomer = (id) => {
@@ -66,11 +88,20 @@ class CustomerView extends Component {
             .catch(() => alert("Coś poszło nie tak"))
     }
 
+    handleCloseForms = () => {
+        this.setState({
+            ...this.state,
+            formEnabled: false,
+            formEditEnabled: false,
+            formEditId: 0
+        })
+    }
+
     render() {
         return (
             <>
                 <Box mt={2}>
-                    <BasicTable customers={this.state.customers} handleChangePageFn={this.handleChangePage} handleRemoveCustomerFn={this.handleRemoveCustomer} pages={this.state.pages}/>
+                    <BasicTable customers={this.state.customers} handleChangePageFn={this.handleChangePage} handleEditCustomerFn={this.handleEditCustomer} handleRemoveCustomerFn={this.handleRemoveCustomer} pages={this.state.pages}/>
                     <Box display="flex" justifyContent="flex-end" mt={1}>
                         <Button variant="contained" color="primary" onClick={this.handleAdd}>
                             Dodaj nowego klienta
@@ -79,7 +110,8 @@ class CustomerView extends Component {
                 </Box>
 
                 <Box mt={2} mb={8}>
-                    {this.state.formEnabled && <Form addCustomerFn={this.addCustomer}/>}
+                    {this.state.formEnabled && <Form addCustomerFn={this.addCustomer} handleCloseForms={this.handleCloseForms}/>}
+                    {this.state.formEditEnabled && <EditForm editCustomerFn={this.editCustomer} id_uzytkownika={this.state.formEditId} handleCloseForms={this.handleCloseForms}/>}
                 </Box>
             </>
         );

@@ -4,21 +4,34 @@ import styled from "styled-components";
 import Typography from "@material-ui/core/Typography";
 import CustomerService from "../service/CustomerService";
 
-export default class Form extends Component {
+export default class EditForm extends Component {
 
     state = {
+        id_uzytkownika: 0,
         imie: "",
         nazwisko: "",
         pesel: "",
         telefon: ""
     }
 
-    handleAdd = () => {
-        const { imie, nazwisko, pesel, telefon } = this.state;
-        const { addCustomerFn } = this.props;
-        if(imie.length > 0 && nazwisko.length > 0 && pesel.length > 0 && telefon.length > 0) {
-            CustomerService.saveCustomer(imie, nazwisko, pesel, telefon)
-                .then(customer => addCustomerFn(customer))
+    componentDidMount() {
+        const { id_uzytkownika } = this.props;
+        CustomerService.getCustomer(id_uzytkownika)
+            .then(customer => this.setState({
+                id_uzytkownika: customer.id_uzytkownika,
+                imie: customer.imie,
+                nazwisko: customer.nazwisko,
+                pesel: customer.pesel,
+                telefon: customer.telefon
+            }))
+    }
+
+    handleEdit = () => {
+        const { id_uzytkownika, imie, nazwisko, pesel, telefon } = this.state;
+        const { editCustomerFn } = this.props;
+        if(id_uzytkownika !== 0 && imie.length > 0 && nazwisko.length > 0 && pesel.length > 0 && telefon.length > 0) {
+            CustomerService.editCustomer(id_uzytkownika, imie, nazwisko, pesel, telefon)
+                .then(customer => editCustomerFn(customer))
                 .catch(() => alert("Coś poszło nie tak"))
         }
     }
@@ -38,7 +51,7 @@ export default class Form extends Component {
                 <Box bgcolor="grey.50" px={18} pt={9} pb={9}>
                     <Box pb={4.5}>
                         <Typography variant="h4" component="h1">
-                            Nowy klient
+                            Klient
                         </Typography>
                     </Box>
 
@@ -57,7 +70,7 @@ export default class Form extends Component {
                         </Input>
                         <Box display="flex" justifyContent="center">
                             <Buttons>
-                                <Button variant="contained" color="primary" onClick={this.handleAdd}>
+                                <Button variant="contained" color="primary" onClick={this.handleEdit}>
                                     Zapisz
                                 </Button>
                                 <Button variant="contained" color="primary" onClick={handleCloseForms}>

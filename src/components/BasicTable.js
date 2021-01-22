@@ -13,7 +13,7 @@ import styled from "styled-components";
 export default class BasicTable extends React.Component {
     render() {
 
-        const {customers, handleChangePageFn, handleRemoveCustomerFn, pages} = this.props;
+        const {customers, handleChangePageFn, handleEditCustomerFn, handleRemoveCustomerFn, pages} = this.props;
 
         return (
             <TableContainer component={Paper}>
@@ -38,7 +38,7 @@ export default class BasicTable extends React.Component {
                                 <TableCell>{row.telefon}</TableCell>
                                 <TableCell width={"5%"}>
                                         <Buttons>
-                                            <Button variant="contained" color="primary" onClick={this.handleAdd} fullWidth={"50%"}>
+                                            <Button variant="contained" color="primary" onClick={() => handleEditCustomerFn(row.id_uzytkownika)} fullWidth={"50%"}>
                                                 Edytuj
                                             </Button>
 

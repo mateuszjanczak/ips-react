@@ -7,6 +7,11 @@ class CustomerService {
             .then(res => res.json());
     }
 
+    getCustomer(id) {
+        return fetch(`${this.url}/customers/${id}`)
+            .then(res => res.json());
+    }
+
     getCustomers(limit, offset) {
         return fetch(`${this.url}/customers/limit/${limit}/offset/${offset}`)
             .then(res => res.json());
@@ -36,6 +41,24 @@ class CustomerService {
         }).then(res => {
             if(!res.ok) throw res;
         })
+    }
+
+    editCustomer(id, imie, nazwisko, pesel, telefon) {
+        return fetch(this.url + "customers/"+ id, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                imie,
+                nazwisko,
+                pesel,
+                telefon
+            })
+        }).then(res => {
+            if(!res.ok) throw res;
+            return res.json();
+        });
     }
 
 }
