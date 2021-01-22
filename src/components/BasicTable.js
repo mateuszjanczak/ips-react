@@ -7,13 +7,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Pagination from "@material-ui/lab/Pagination";
-import {Box} from "@material-ui/core";
-
+import {Box, Button} from "@material-ui/core";
+import styled from "styled-components";
 
 export default class BasicTable extends React.Component {
     render() {
 
-        const {customers, handleChangePageFn, pages} = this.props;
+        const {customers, handleChangePageFn, handleRemoveCustomerFn, pages} = this.props;
 
         return (
             <TableContainer component={Paper}>
@@ -25,6 +25,7 @@ export default class BasicTable extends React.Component {
                             <TableCell>Nazwisko</TableCell>
                             <TableCell>Pesel</TableCell>
                             <TableCell>Telefon</TableCell>
+                            <TableCell>Operacje</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -35,6 +36,17 @@ export default class BasicTable extends React.Component {
                                 <TableCell>{row.nazwisko}</TableCell>
                                 <TableCell>{row.pesel}</TableCell>
                                 <TableCell>{row.telefon}</TableCell>
+                                <TableCell width={"5%"}>
+                                        <Buttons>
+                                            <Button variant="contained" color="primary" onClick={this.handleAdd} fullWidth={"50%"}>
+                                                Edytuj
+                                            </Button>
+
+                                            <Button variant="contained" color="secondary" onClick={() => handleRemoveCustomerFn(row.id_uzytkownika)} fullWidth={"50%"}>
+                                                Usuń
+                                            </Button>
+                                        </Buttons>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -47,3 +59,8 @@ export default class BasicTable extends React.Component {
         );
     }
 }
+
+const Buttons = styled.div`
+    display: flex;
+    grid-gap: 1rem;
+`;

@@ -13,12 +13,26 @@ class CustomerView extends Component {
     }
 
     componentDidMount() {
-        CustomerService.getCustomersCount()
-            .then(({count}) => this.setState({
-                ...this.state,
-                pages: parseInt(count / 10) + 1
-            }))
+        this.setCountPages();
         this.fetchCustomers(10, 0);
+    }
+
+    setCountPages = () => {
+        CustomerService.getCustomersCount()
+            .then(({count}) => {
+                let pages;
+
+                if(parseInt(count / 10) === count/10) {
+                    pages = parseInt(count / 10);
+                } else {
+                    pages = parseInt(count / 10) + 1;
+                }
+
+                this.setState({
+                    ...this.state,
+                    pages
+                })
+            })
     }
 
     fetchCustomers = (limit, offset) => {
@@ -43,11 +57,20 @@ class CustomerView extends Component {
         this.fetchCustomers(10, value - 1);
     }
 
+    handleRemoveCustomer = (id) => {
+        CustomerService.removeCustomer(id)
+            .then(() => this.setState({
+                customers: this.state.customers.filter(customer => customer.id_uzytkownika !== id)
+            }))
+            .then(this.setCountPages)
+            .catch(() => alert("Coś poszło nie tak"))
+    }
+
     render() {
         return (
             <>
                 <Box mt={2}>
-                    <BasicTable customers={this.state.customers} handleChangePageFn={this.handleChangePage} pages={this.state.pages}/>
+                    <BasicTable customers={this.state.customers} handleChangePageFn={this.handleChangePage} handleRemoveCustomerFn={this.handleRemoveCustomer} pages={this.state.pages}/>
                     <Box display="flex" justifyContent="flex-end" mt={1}>
                         <Button variant="contained" color="primary" onClick={this.handleAdd}>
                             Dodaj nowego klienta

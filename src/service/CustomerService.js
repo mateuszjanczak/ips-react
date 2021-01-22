@@ -30,6 +30,14 @@ class CustomerService {
         });
     }
 
+    removeCustomer(id) {
+        return fetch(this.url + "customers/" + id, {
+            method: "DELETE"
+        }).then(res => {
+            if(!res.ok) throw res;
+        })
+    }
+
 }
 
 export default new CustomerService();
