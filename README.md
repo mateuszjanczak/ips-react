@@ -9,6 +9,9 @@ Projekt o którym więcej możesz poczytać na moim blogu.
 * Node.js z [nodejs.org](https://nodejs.org)
 * Uruchomiony serwer [github.com](https://github.com/mateuszjanczak/ips-spring-jdbc)
 
+## Podgląd
+![Preview](./docs/ips_react_demo.gif)
+
 ## Skrypty
 
 W folderze z projektem możesz użyć:
