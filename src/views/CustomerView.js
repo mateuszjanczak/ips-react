@@ -38,8 +38,8 @@ class CustomerView extends Component {
             })
     }
 
-    fetchCustomers = (limit, offset) => {
-        CustomerService.getCustomers(limit, offset)
+    fetchCustomers = (limit, page) => {
+        CustomerService.getCustomers(limit, page)
             .then(customers => this.setState({...this.state, customers}));
     }
 

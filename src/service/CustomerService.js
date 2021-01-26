@@ -12,8 +12,8 @@ class CustomerService {
             .then(res => res.json());
     }
 
-    getCustomers(limit, offset) {
-        return fetch(`${this.url}/customers/limit/${limit}/offset/${offset}`)
+    getCustomers(limit, page) {
+        return fetch(`${this.url}/customers/limit/${limit}/page/${page}`)
             .then(res => res.json());
     }
 
