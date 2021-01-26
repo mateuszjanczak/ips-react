@@ -56,6 +56,8 @@ class CustomerView extends Component {
         this.setState({
             ...this.state,
             customers: [...this.state.customers, customer]
+        }, () => {
+            this.setCountPages();
         })
     }
 
